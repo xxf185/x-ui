@@ -170,7 +170,7 @@ config_after_install() {
 }
 
 install_x-ui() {
-    systemctl stop x-ui
+
     cd /usr/local/
 
     if [ $# == 0 ]; then
@@ -197,24 +197,27 @@ install_x-ui() {
     fi
 
     if [[ -e /usr/local/x-ui/ ]]; then
+        systemctl stop x-ui
         rm /usr/local/x-ui/ -rf
     fi
 
     tar zxvf x-ui-linux-${arch}.tar.gz
     rm x-ui-linux-${arch}.tar.gz -f
     cd x-ui
-    chmod +x x-ui bin/xray-linux-${arch}
+    chmod +x x-ui
+
+    # Check the system's architecture and rename the file accordingly
+    if [[ $(arch) == "armv5" || $(arch) == "armv6" || $(arch) == "armv7" ]]; then
+        mv bin/xray-linux-$(arch) bin/xray-linux-arm
+        chmod +x bin/xray-linux-arm
+    fi
+
+    chmod +x x-ui bin/xray-linux-$(arch)
     cp -f x-ui.service /etc/systemd/system/
     wget --no-check-certificate -O /usr/bin/x-ui https://raw.githubusercontent.com/xxf185/x-ui/master/x-ui.sh
     chmod +x /usr/local/x-ui/x-ui.sh
     chmod +x /usr/bin/x-ui
     config_after_install
-    #echo -e "如果是全新安装，默认网页端口为 ${green}54321${plain}，用户名和密码默认都是 ${green}admin${plain}"
-    #echo -e "请自行确保此端口没有被其他程序占用，${yellow}并且确保 54321 端口已放行${plain}"
-    #    echo -e "若想将 54321 修改为其它端口，输入 x-ui 命令进行修改，同样也要确保你修改的端口也是放行的"
-    #echo -e ""
-    #echo -e "如果是更新面板，则按你之前的方式访问面板"
-    #echo -e ""
     systemctl daemon-reload
     systemctl enable x-ui
     systemctl start x-ui
