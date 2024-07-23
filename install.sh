@@ -100,32 +100,73 @@ fi
 
 
 install_base() {
-    if [[ x"${release}" == x"centos" ]]; then
-        yum install wget curl tar -y
-    else
-        apt install wget curl tar -y
-    fi
+    case "${release}" in
+    ubuntu | debian | armbian)
+        apt-get update && apt-get install -y -q wget curl tar tzdata
+        ;;
+    centos | almalinux | rocky | oracle)
+        yum -y update && yum install -y -q wget curl tar tzdata
+        ;;
+    fedora)
+        dnf -y update && dnf install -y -q wget curl tar tzdata
+        ;;
+    arch | manjaro | parch)
+        pacman -Syu && pacman -Syu --noconfirm wget curl tar tzdata
+        ;;
+    opensuse-tumbleweed)
+        zypper refresh && zypper -q install -y wget curl tar timezone
+        ;;
+    *)
+        apt-get update && apt install -y -q wget curl tar tzdata
+        ;;
+    esac
+}
+
+gen_random_string() {
+    local length="$1"
+    local random_string=$(LC_ALL=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$length" | head -n 1)
+    echo "$random_string"
 }
 
 #This function will be called when user installed x-ui out of sercurity
 config_after_install() {
-    echo -e "${yellow}出于安全考虑，安装/更新完成后需要强制修改端口与账户密码${plain}"
-    read -p "确认是否继续?[y/n]": config_confirm
-    if [[ x"${config_confirm}" == x"y" || x"${config_confirm}" == x"Y" ]]; then
-        read -p "请设置您的账户名:" config_account
-        echo -e "${yellow}您的账户名将设定为:${config_account}${plain}"
-        read -p "请设置您的账户密码:" config_password
-        echo -e "${yellow}您的账户密码将设定为:${config_password}${plain}"
-        read -p "请设置面板访问端口:" config_port
-        echo -e "${yellow}您的面板访问端口将设定为:${config_port}${plain}"
-        echo -e "${yellow}确认设定,设定中${plain}"
+    echo -e "${yellow}Install/update finished! For security it's recommended to modify panel settings ${plain}"
+    read -p "Would you like to customize the panel settings? (If not, random settings will be applied) [y/n]: " config_confirm
+    if [[ "${config_confirm}" == "y" || "${config_confirm}" == "Y" ]]; then
+        read -p "Please set up your username: " config_account
+        echo -e "${yellow}Your username will be: ${config_account}${plain}"
+        read -p "Please set up your password: " config_password
+        echo -e "${yellow}Your password will be: ${config_password}${plain}"
+        read -p "Please set up the panel port: " config_port
+        echo -e "${yellow}Your panel port is: ${config_port}${plain}"
+        read -p "Please set up the web base path (ip:port/webbasepath/): " config_webBasePath
+        echo -e "${yellow}Your web base path is: ${config_webBasePath}${plain}"
+        echo -e "${yellow}Initializing, please wait...${plain}"
         /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password}
-        echo -e "${yellow}账户密码设定完成${plain}"
+        echo -e "${yellow}Account name and password set successfully!${plain}"
         /usr/local/x-ui/x-ui setting -port ${config_port}
-        echo -e "${yellow}面板端口设定完成${plain}"
+        echo -e "${yellow}Panel port set successfully!${plain}"
+        /usr/local/x-ui/x-ui setting -webBasePath ${config_webBasePath}
+        echo -e "${yellow}Web base path set successfully!${plain}"
     else
-        echo -e "${red}已取消,所有设置项均为默认设置,请及时修改${plain}"
+        echo -e "${red}Cancel...${plain}"
+        if [[ ! -f "/etc/x-ui/x-ui.db" ]]; then
+            local usernameTemp=$(head -c 6 /dev/urandom | base64)
+            local passwordTemp=$(head -c 6 /dev/urandom | base64)
+            local webBasePathTemp=$(gen_random_string 10)
+            /usr/local/x-ui/x-ui setting -username ${usernameTemp} -password ${passwordTemp} -webBasePath ${webBasePathTemp}
+            echo -e "This is a fresh installation, will generate random login info for security concerns:"
+            echo -e "###############################################"
+            echo -e "${green}Username: ${usernameTemp}${plain}"
+            echo -e "${green}Password: ${passwordTemp}${plain}"
+            echo -e "${green}WebBasePath: ${webBasePathTemp}${plain}"
+            echo -e "###############################################"
+            echo -e "${yellow}If you forgot your login info, you can type "x-ui settings" to check after installation${plain}"
+        else
+            echo -e "${yellow}This is your upgrade, will keep old settings. If you forgot your login info, you can type "x-ui settings" to check${plain}"
+        fi
     fi
+    /usr/local/x-ui/x-ui migrate
 }
 
 install_x-ui() {
