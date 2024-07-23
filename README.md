@@ -18,10 +18,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/xxf185/x-ui/master/install.sh)
 
 - **端口：** 2053
 - **用户名 & 密码：** 当您跳过设置时，此项会随机生成。
-- **数据库路径：**
-  - /etc/x-ui/x-ui.db
-- **Xray 配置路径：**
-  - /usr/local/x-ui/bin/config.json
+
 - **面板链接（无SSL）：**
   - http://ip:2053/panel
   - http://domain:2053/panel
