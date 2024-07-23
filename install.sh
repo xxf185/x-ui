@@ -80,8 +80,8 @@ elif [[ "${release}" == "oracle" ]]; then
         echo -e "${red} 请使用 Oracle Linux 8 或更高版本 ${plain}\n" && exit 1
     fi
 else
-    echo -e "${red}Your operating system is not supported by this script.${plain}\n"
-    echo "Please ensure you are using one of the following supported operating systems:"
+    echo -e "${red}此脚本不支持您的操作系统.${plain}\n"
+    echo "请使用以下受支持的操作系统之一:"
     echo "- Ubuntu 20.04+"
     echo "- Debian 11+"
     echo "- CentOS 8+"
@@ -130,18 +130,18 @@ gen_random_string() {
 
 # This function will be called when user installed x-ui out of security
 config_after_install() {
-    echo -e "${yellow}Install/update finished! For security it's recommended to modify panel settings ${plain}"
-    read -p "Would you like to customize the panel settings? (If not, random settings will be applied) [y/n]: " config_confirm
+    echo -e "${yellow} 出于安全考虑，安装/更新完成后需要强制修改端口与账户密码 ${plain}"
+    read -p "确认是否继续? [y/n]: " config_confirm
     if [[ "${config_confirm}" == "y" || "${config_confirm}" == "Y" ]]; then
-        read -p "Please set up your username: " config_account
-        echo -e "${yellow}Your username will be: ${config_account}${plain}"
-        read -p "Please set up your password: " config_password
-        echo -e "${yellow}Your password will be: ${config_password}${plain}"
-        read -p "Please set up the panel port: " config_port
-        echo -e "${yellow}Your panel port is: ${config_port}${plain}"
-        read -p "Please set up the web base path (ip:port/webbasepath/): " config_webBasePath
-        echo -e "${yellow}Your web base path is: ${config_webBasePath}${plain}"
-        echo -e "${yellow}Initializing, please wait...${plain}"
+        read -p "请设置您的账户名: " config_account
+        echo -e "${yellow}您的账户名将设定为: ${config_account}${plain}"
+        read -p "请设置您的账户密码: " config_password
+        echo -e "${yellow}您的账户密码将设定为: ${config_password}${plain}"
+        read -p "请设置面板访问端口: " config_port
+        echo -e "${yellow}您的面板访问端口将设定为: ${config_port}${plain}"
+        read -p "请设置面板访问路径 (ip:port/路径/): " config_webBasePath
+        echo -e "${yellow}您的面板访问路径将设定为: ${config_webBasePath}${plain}"
+        echo -e "${yellow}确认设定,设定中...${plain}"
         /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password}
         echo -e "${yellow}Account name and password set successfully!${plain}"
         /usr/local/x-ui/x-ui setting -port ${config_port}
@@ -149,17 +149,17 @@ config_after_install() {
         /usr/local/x-ui/x-ui setting -webBasePath ${config_webBasePath}
         echo -e "${yellow}Web base path set successfully!${plain}"
     else
-        echo -e "${red}Cancel...${plain}"
+        echo -e "${red}取消...${plain}"
         if [[ ! -f "/etc/x-ui/x-ui.db" ]]; then
             local usernameTemp=$(head -c 6 /dev/urandom | base64)
             local passwordTemp=$(head -c 6 /dev/urandom | base64)
             local webBasePathTemp=$(gen_random_string 10)
             /usr/local/x-ui/x-ui setting -username ${usernameTemp} -password ${passwordTemp} -webBasePath ${webBasePathTemp}
-            echo -e "This is a fresh installation, will generate random login info for security concerns:"
+            echo -e "这是全新安装.所有设置项均为默认设置,请及时修改"
             echo -e "###############################################"
-            echo -e "${green}Username: ${usernameTemp}${plain}"
-            echo -e "${green}Password: ${passwordTemp}${plain}"
-            echo -e "${green}WebBasePath: ${webBasePathTemp}${plain}"
+            echo -e "${green}账户名: ${usernameTemp}${plain}"
+            echo -e "${green}密码: ${passwordTemp}${plain}"
+            echo -e "${green}面板路径: ${webBasePathTemp}${plain}"
             echo -e "###############################################"
             echo -e "${yellow}If you forgot your login info, you can type "x-ui settings" to check after installation${plain}"
         else
