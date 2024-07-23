@@ -155,15 +155,15 @@ config_after_install() {
             local passwordTemp=$(head -c 6 /dev/urandom | base64)
             local webBasePathTemp=$(gen_random_string 10)
             /usr/local/x-ui/x-ui setting -username ${usernameTemp} -password ${passwordTemp} -webBasePath ${webBasePathTemp}
-            echo -e "这是全新安装.所有设置项均为默认设置,请及时修改"
+            echo -e "安装完成.所有设置项均为默认设置,请及时修改"
             echo -e "###############################################"
             echo -e "${green}账户名: ${usernameTemp}${plain}"
             echo -e "${green}密码: ${passwordTemp}${plain}"
             echo -e "${green}面板路径: ${webBasePathTemp}${plain}"
             echo -e "###############################################"
-            echo -e "${yellow}If you forgot your login info, you can type "x-ui settings" to check after installation${plain}"
+            echo -e "${yellow}登录信息.可以输入“x-ui”查看${plain}"
         else
-            echo -e "${yellow}This is your upgrade, will keep old settings. If you forgot your login info, you can type "x-ui settings" to check${plain}"
+            echo -e "${yellow}升级成功.将保留旧设置。如果忘记登录信息，可以输入“x-ui”查看${plain}"
         fi
     fi
     /usr/local/x-ui/x-ui migrate
