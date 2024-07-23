@@ -8,7 +8,7 @@ plain='\033[0m'
 cur_dir=$(pwd)
 
 # check root
-[[ $EUID -ne 0 ]] && echo -e "${red}Fatal error: ${plain} Please run this script with root privilege \n " && exit 1
+[[ $EUID -ne 0 ]] && echo -e "${red}错误: ${plain} 必须以root权限运行此脚本 \n " && exit 1
 
 # Check OS and set release variable
 if [[ -f /etc/os-release ]]; then
@@ -18,10 +18,10 @@ elif [[ -f /usr/lib/os-release ]]; then
     source /usr/lib/os-release
     release=$ID
 else
-    echo "Failed to check the system OS, please contact the author!" >&2
+    echo "系统OS检查失败，请联系作者!" >&2
     exit 1
 fi
-echo "The OS release is: $release"
+echo "OS: $release"
 
 arch() {
     case "$(uname -m)" in
@@ -32,11 +32,11 @@ arch() {
     armv6* | armv6) echo 'armv6' ;;
     armv5* | armv5) echo 'armv5' ;;
     s390x) echo 's390x' ;;
-    *) echo -e "${green}Unsupported CPU architecture! ${plain}" && rm -f install.sh && exit 1 ;;
+    *) echo -e "${green}不支持的CPU架构! ${plain}" && rm -f install.sh && exit 1 ;;
     esac
 }
 
-echo "架构: $(arch)"
+echo "架构:$(arch)"
 
 os_version=""
 os_version=$(grep -i version_id /etc/os-release | cut -d \" -f2 | cut -d . -f1)
@@ -53,31 +53,31 @@ elif [[ "${release}" == "opensuse-tumbleweed" ]]; then
     echo "Your OS is OpenSUSE Tumbleweed"
 elif [[ "${release}" == "centos" ]]; then
     if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red} Please use CentOS 8 or higher ${plain}\n" && exit 1
+        echo -e "${red} 请使用 CentOS 8 或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "ubuntu" ]]; then
     if [[ ${os_version} -lt 20 ]]; then
-        echo -e "${red} Please use Ubuntu 20 or higher version!${plain}\n" && exit 1
+        echo -e "${red} 请使用Ubuntu 20或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "fedora" ]]; then
     if [[ ${os_version} -lt 36 ]]; then
-        echo -e "${red} Please use Fedora 36 or higher version!${plain}\n" && exit 1
+        echo -e "${red} 请使用 Fedora 36 或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "debian" ]]; then
     if [[ ${os_version} -lt 11 ]]; then
-        echo -e "${red} Please use Debian 11 or higher ${plain}\n" && exit 1
+        echo -e "${red} 请使用 Debian 11 或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "almalinux" ]]; then
     if [[ ${os_version} -lt 9 ]]; then
-        echo -e "${red} Please use AlmaLinux 9 or higher ${plain}\n" && exit 1
+        echo -e "${red} 请使用 AlmaLinux 9 或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "rocky" ]]; then
     if [[ ${os_version} -lt 9 ]]; then
-        echo -e "${red} Please use Rocky Linux 9 or higher ${plain}\n" && exit 1
+        echo -e "${red} 请使用 Rocky Linux 9 或更高版本 ${plain}\n" && exit 1
     fi
 elif [[ "${release}" == "oracle" ]]; then
     if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red} Please use Oracle Linux 8 or higher ${plain}\n" && exit 1
+        echo -e "${red} 请使用 Oracle Linux 8 或更高版本 ${plain}\n" && exit 1
     fi
 else
     echo -e "${red}Your operating system is not supported by this script.${plain}\n"
