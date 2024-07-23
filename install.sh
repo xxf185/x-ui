@@ -36,7 +36,7 @@ arch() {
     esac
 }
 
-echo "架构: ${arch}"
+echo "架构:: $(arch)"
 
 os_version=""
 os_version=$(grep -i version_id /etc/os-release | cut -d \" -f2 | cut -d . -f1)
@@ -201,8 +201,8 @@ install_x-ui() {
         rm /usr/local/x-ui/ -rf
     fi
 
-    tar zxvf x-ui-linux-${arch}.tar.gz
-    rm x-ui-linux-${arch}.tar.gz -f
+    tar zxvf x-ui-linux-$(arch).tar.gz
+    rm x-ui-linux-$(arch).tar.gz -f
     cd x-ui
     chmod +x x-ui
 
@@ -218,6 +218,7 @@ install_x-ui() {
     chmod +x /usr/local/x-ui/x-ui.sh
     chmod +x /usr/bin/x-ui
     config_after_install
+    
     systemctl daemon-reload
     systemctl enable x-ui
     systemctl start x-ui
