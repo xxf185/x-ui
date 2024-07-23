@@ -36,7 +36,7 @@ arch() {
     esac
 }
 
-echo "架构:: $(arch)"
+echo "架构: $(arch)"
 
 os_version=""
 os_version=$(grep -i version_id /etc/os-release | cut -d \" -f2 | cut -d . -f1)
