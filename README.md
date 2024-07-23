@@ -20,11 +20,11 @@ bash <(curl -Ls https://raw.githubusercontent.com/xxf185/x-ui/master/install.sh)
  
  ## 用户名&密码:默认随机生成.
 
- ## 面板链接(无SSL):
+ ## 面板链接(无SSL)
  
- http://ip:2053/panel
+ ## http://ip:2053/panel
  
- ## 面板链接(有SSL)：
+ ## 面板链接(有SSL)
  
- https://domain:2053/panel
+ ## https://domain:2053/panel
 
