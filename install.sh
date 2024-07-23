@@ -128,7 +128,7 @@ gen_random_string() {
     echo "$random_string"
 }
 
-#This function will be called when user installed x-ui out of security
+# This function will be called when user installed x-ui out of security
 config_after_install() {
     echo -e "${yellow}Install/update finished! For security it's recommended to modify panel settings ${plain}"
     read -p "Would you like to customize the panel settings? (If not, random settings will be applied) [y/n]: " config_confirm
