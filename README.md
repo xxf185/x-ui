@@ -14,14 +14,17 @@ bash <(curl -Ls https://raw.githubusercontent.com/xxf185/x-ui/master/install.sh)
 bash <(curl -Ls https://raw.githubusercontent.com/xxf185/x-ui/master/install.sh) v2.3.6
 ```
 
-  ### 信息
+ ## 默认面板信息
 
-- **端口：** 2053
-- **用户名 & 密码：** 当您跳过设置时，此项会随机生成。
+ ## 端口:2053
+ 
+ ## 用户名&密码:默认随机生成.
 
-- **面板链接（无SSL）：**
-  - http://ip:2053/panel
-  - http://domain:2053/panel
-- **面板链接（有SSL）：**
-  - https://domain:2053/panel
+ ## 面板链接(无SSL):
+ 
+ http://ip:2053/panel
+ 
+ ## 面板链接(有SSL)：
+ 
+ https://domain:2053/panel
 
