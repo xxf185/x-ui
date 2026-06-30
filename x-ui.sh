@@ -675,7 +675,7 @@ show_log() {
 
 bbr_menu() {
     echo -e "${green}\t1.${plain} 启用 bbr"
-    echo -e "${green}\t2.${plain} Disable BBR"
+    echo -e "${green}\t2.${plain} 禁用 bbr"
     echo -e "${green}\t0.${plain} Back to Main Menu"
     read -rp "Choose an option: " choice
     case "$choice" in
