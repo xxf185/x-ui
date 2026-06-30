@@ -864,9 +864,9 @@ show_status() {
 show_enable_status() {
     check_enabled
     if [[ $? == 0 ]]; then
-        echo -e "Start automatically: ${green}Yes${plain}"
+        echo -e "开机自启: ${green}Yes${plain}"
     else
-        echo -e "Start automatically: ${red}No${plain}"
+        echo -e "开机自启: ${red}No${plain}"
     fi
 }
 
