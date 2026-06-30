@@ -1528,6 +1528,6 @@ install_x-ui() {
 └────────────────────────────────────────────────────────────────┘"
 }
 
-echo -e "${green}Running...${plain}"
+echo -e "${green}运行中...${plain}"
 install_base
 install_x-ui $1
